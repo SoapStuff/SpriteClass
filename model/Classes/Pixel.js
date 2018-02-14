@@ -1,5 +1,15 @@
 const Edge = require('./Edge');
 
+// noinspection JSCommentMatchesSignature
+/**
+ *
+ * @param (double) x X coordinate of the pixel
+ * @param (double) y Y coordinate of the pixel
+ * @param (double) r Red color value of the pixel
+ * @param (double) g Green color value of the pixel
+ * @param (double) b Blue color value of the pixel
+ * @param (PixelMatrix) matrix Matrix that the pixel is in
+ */
 module.exports = function Pixel(x, y, r, g, b, matrix) {
     this.x = x;
     this.y = y;
@@ -33,6 +43,11 @@ module.exports = function Pixel(x, y, r, g, b, matrix) {
     this.hex += hexG.length === 2 ? hexG : "0" + hexG;
     this.hex += hexB.length === 2 ? hexB : "0" + hexB;
 
+    /**
+     * Get the draw object for the pixel.
+     *
+     * @returns {{x: *, y: *}}
+     */
     this.getDrawObject = function () {
         return {
             x: this.x,
@@ -40,18 +55,34 @@ module.exports = function Pixel(x, y, r, g, b, matrix) {
         }
     };
 
+    /**
+     * Get the hexadecimal color for the pixel.
+     *
+     * @returns {string|*}
+     */
     this.getHexadecimal = function () {
         return this.hex;
     };
 
+    /**
+     * Get the edges of the pixel.
+     *
+     * @returns {Array|*}
+     */
     this.getEdges = function () {
         return this.edges;
     };
 
+    /**
+     * Get the X coordinate of the pixel.
+     */
     this.getX = function () {
         return this.x;
     };
 
+    /**
+     * Get the Y coordinate of the pixel.
+     */
     this.getY = function () {
         return this.y;
     }

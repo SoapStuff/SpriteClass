@@ -1,5 +1,12 @@
 const Pixel = require("./Pixel");
 
+// noinspection JSCommentMatchesSignature
+/**
+ * @constructor
+ * @param (double) width Width of the image
+ * @param (double) height Height of the image
+ * @param (FileBuffer) buffer File buffer for the image
+ */
 module.exports = function PixelMatrix(width, height, buffer) {
     this.matrix = [];
     this.edges = [];
@@ -38,6 +45,12 @@ module.exports = function PixelMatrix(width, height, buffer) {
         this.drawObject["lines"].push(this.edges[i].getDrawObject());
     }
 
+    /**
+     * Get the drawObject of the PixelMatrix.
+     *
+     * @param callback Callback for asynch use
+     * @returns {*} The drawObject
+     */
     this.getDrawObject = function (callback) {
         if (callback) {
             callback(this.drawObject);
