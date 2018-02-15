@@ -6,7 +6,7 @@ router.get("/", function (req, res) {
 });
 
 router.post("/gl", function (req, res) {
-    var data = require('../model/Database/sprites')['test'].getDrawObject();
+    var data = require('../model/Database/sprites')['visual'].getDrawObject(req.body);
     res.send(data);
 });
 

@@ -2,29 +2,37 @@ const Edge = require('./Edge');
 
 // noinspection JSCommentMatchesSignature
 /**
- *
+ * @constructor
  * @param (double) x X coordinate of the pixel
  * @param (double) y Y coordinate of the pixel
  * @param (double) r Red color value of the pixel
  * @param (double) g Green color value of the pixel
  * @param (double) b Blue color value of the pixel
- * @param (PixelMatrix) matrix Matrix that the pixel is in
+ * @param (pixel[][]) matrix Matrix that the pixel is in
+ * @param (PixelFrame) pixelFrame The pixelFrame object that creates the pixel
  */
-module.exports = function Pixel(x, y, r, g, b, matrix) {
+module.exports = function Pixel(x, y, r, g, b, matrix, pixelFrame) {
     this.x = x;
     this.y = y;
     this.r = r;
     this.g = g;
     this.b = b;
+    this.pixelFrame = pixelFrame;
 
-    this.edges = [];
+    var edges = [];
+    var edgeCount = 0;
 
     for (var hor = x - 1; hor <= x + 1; hor++) {
         for (var ver = y - 1; ver <= y + 1; ver++) {
             if (hor === x && ver === y) continue;
             try {
                 if (matrix[hor][ver] !== undefined) {
-                    this.edges.push(new Edge(this, matrix[hor][ver]));
+                    var edge = new Edge(this, matrix[hor][ver]);
+                    edges.push(edge);
+                    edgeCount++;
+                    matrix[hor][ver].edges.push(edge);
+                    matrix[hor][ver].edgeCount++;
+                    this.pixelFrame.addEdge(edge);
                 }
             } catch (error) {
                 if (!(error instanceof TypeError)) {
@@ -43,47 +51,6 @@ module.exports = function Pixel(x, y, r, g, b, matrix) {
     this.hex += hexG.length === 2 ? hexG : "0" + hexG;
     this.hex += hexB.length === 2 ? hexB : "0" + hexB;
 
-    /**
-     * Get the draw object for the pixel.
-     *
-     * @returns {{x: *, y: *}}
-     */
-    this.getDrawObject = function () {
-        return {
-            x: this.x,
-            y: this.y
-        }
-    };
-
-    /**
-     * Get the hexadecimal color for the pixel.
-     *
-     * @returns {string|*}
-     */
-    this.getHexadecimal = function () {
-        return this.hex;
-    };
-
-    /**
-     * Get the edges of the pixel.
-     *
-     * @returns {Array|*}
-     */
-    this.getEdges = function () {
-        return this.edges;
-    };
-
-    /**
-     * Get the X coordinate of the pixel.
-     */
-    this.getX = function () {
-        return this.x;
-    };
-
-    /**
-     * Get the Y coordinate of the pixel.
-     */
-    this.getY = function () {
-        return this.y;
-    }
+    this.edgeCount = edgeCount;
+    this.edges = edges;
 };

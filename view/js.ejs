@@ -18,7 +18,7 @@
         }
 
         // Clear the canvas
-        gl.clearColor(1.0, 1.0, 1.0, 0.9);
+        gl.clearColor(0.5, 0.5, 0.5, 1.0);
 
         // Clear the color buffer with specified clear color
         gl.clear(gl.COLOR_BUFFER_BIT);
@@ -29,16 +29,14 @@
     var request = new XMLHttpRequest();
 
     request.open('POST', 'gl');
-    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    request.onload = function() {
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    request.onload = function () {
         var data = JSON.parse(request.responseText);
-        console.log(data["points"]);
+        console.log(data);
 
-        var points = data["points"]
-
-        for (key in points) {
-            drawPoints(canvas, gl, key, points[key]);
+        for (key in data) {
+            drawPoints(canvas, gl, key, data[key]);
         }
     };
-    request.send();
+    request.send(JSON.stringify({width : canvas.width, height : canvas.height}));
 </script>

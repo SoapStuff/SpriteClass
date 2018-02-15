@@ -7,15 +7,7 @@
         const g = parseInt(color.substring(2, 4), 16) / 255;
         const b = parseInt(color.substring(4, 6), 16) / 255;
 
-        var vertices = [];
-
-        for (var i = 0; i < points.length; i++) {
-            var x = (points[i].x / canvas.width) - 1;
-            var y = (-points[i].y / canvas.height) + 1;
-            vertices.push(x);
-            vertices.push(y);
-            vertices.push(0.0);
-        }
+        var vertices = points;
 
         // Create an empty buffer object to store the vertex buffer
         var vertex_buffer = gl.createBuffer();
@@ -95,7 +87,7 @@
         gl.vertexAttribPointer(coordinates, 3, gl.FLOAT, false, 0, 0);
 
         // Enable the attribute
-        gl.enableVertexAttribArray(coord);
+        gl.enableVertexAttribArray(coordinates);
 
         /*============= Drawing the primitive ===============*/
 
@@ -106,6 +98,6 @@
         gl.viewport(0, 0, canvas.width, canvas.height);
 
         // Draw the triangle
-        gl.drawArrays(gl.POINTS, 0, points.length);
+        gl.drawArrays(gl.POINTS, 0, points.length / 3);
     }
 </script>

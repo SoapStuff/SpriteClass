@@ -1,9 +1,16 @@
 const http = require('http');
 const express = require('express');
 const app = express();
-const Sprite = require('./model/Classes/Sprite');
+const body_parser = require('body-parser');
+var sprites = require('./model/Database/sprites');
+global.__basedir = __dirname;
 
-require('./model/Database/sprites')['test'] = new Sprite("C:\\users\\stijn\\WebstormProjects\\SpriteClass\\resources\\testFull.png");
+sprites.init();
+
+app.use(body_parser.json());
+app.use(body_parser.urlencoded({
+    extended: true
+}));
 
 app.use(require('./controller'));
 
@@ -12,3 +19,4 @@ app.set('view engine', 'ejs');
 
 const server = http.createServer(app);
 server.listen(80);
+console.log("Server started");

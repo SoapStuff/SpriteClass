@@ -1,6 +1,6 @@
 var fs = require('fs');
 var PNG = require('pngjs').PNG;
-const PixelMatrix = require('./PixelMatrix');
+const PixelFrame = require('./PixelFrame');
 
 // noinspection JSCommentMatchesSignature
 /**
@@ -12,8 +12,8 @@ module.exports = function Sprite(imageUrl, maskUrl) {
     const imageData = fs.readFileSync(imageUrl);
     const image = PNG.sync.read(imageData);
 
-    this.imageMatrix = new PixelMatrix(image.width, image.height, image.data);
-    this.maskMatrix = undefined;
+    this.imageFrame = new PixelFrame(image.width, image.height, image.data);
+    this.maskFrame = undefined;
 
     var that = this;
 
@@ -21,40 +21,41 @@ module.exports = function Sprite(imageUrl, maskUrl) {
         const maskData = fs.readFileSync(maskUrl);
         const mask = PNG.sync.read(maskData);
 
-        this.maskMatrix = new PixelMatrix(mask.width, mask.height, mask.data);
+        this.maskFrame = new PixelFrame(mask.width, mask.height, mask.data);
     } else {
-        this.maskMatrix = this.imageMatrix;
+        this.maskFrame = this.imageFrame;
     }
 
     /**
      * Get the drawObject of the Sprite.
      *
+     * @param body Body from request containing canvas details
      * @param callback Callback for asynch use
      * @returns {*|{x: *, y: *}|{x1: *, y1: *, x2: *, y2: *}}
      */
-    this.getDrawObject = function (callback) {
+    this.getDrawObject = function (body, callback) {
         if (callback) {
-            that.imageMatrix.getDrawObject(callback);
+            that.imageFrame.getDrawObject(body, callback);
         } else {
-            return that.imageMatrix.getDrawObject();
+            return that.imageFrame.getDrawObject(body);
         }
     };
 
     // noinspection JSUnusedGlobalSymbols
     this.getMaskMatrix = function (callback) {
         if (callback) {
-            callback(that.maskMatrix);
+            callback(that.maskFrame);
         } else {
-            return that.maskMatrix;
+            return that.maskFrame;
         }
     };
 
     // noinspection JSUnusedGlobalSymbols
     this.getImageMatrix = function (callback) {
         if (callback) {
-            callback(that.imageMatrix);
-        }  else {
-            return that.imageMatrix;
+            callback(that.imageFrame);
+        } else {
+            return that.imageFrame;
         }
     }
 };
