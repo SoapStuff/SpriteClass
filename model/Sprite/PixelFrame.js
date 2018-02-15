@@ -1,16 +1,19 @@
 const Pixel = require("./Pixel");
 
+// noinspection JSValidateJSDoc
 /**
  * Method that adds the points to draw to the vertices array from a pixel.
  *
  * @param {[]} vertices The array of drawing vertices
  * @param {Pixel} pixel The pixel to draw
+ * @param {double} spriteX The x location of the sprite
+ * @param {double} spriteY The y location of the sprite
  * @param {int} width The width of the canvas
  * @param {int} height The height of the canvas
  */
-var createPixelDrawArray = function (vertices, pixel, width, height) {
-    var x = (pixel.x / width) - 1;
-    var y = (-pixel.y / height) + 1;
+var createPixelDrawArray = function (vertices, pixel, spriteX, spriteY, width, height) {
+    var x = ((pixel.x + spriteX) / width) - 1;
+    var y = (-(pixel.y + spriteY) / height) + 1;
     vertices.push(x);
     vertices.push(y);
     vertices.push(0.0);
@@ -49,10 +52,6 @@ module.exports = function PixelFrame(width, height, buffer) {
     this.edges = [];
     this.pixels = [];
 
-    this.addEdge = function (edge) {
-        this.edges.push(edge);
-    };
-
     var x = 0;
     var y = 0;
 
@@ -76,16 +75,18 @@ module.exports = function PixelFrame(width, height, buffer) {
      * Get the drawObject of the PixelFrame.
      *
      * @param body Body containing canvas details
+     * @param x The x location of the Sprite
+     * @param y The y location of the Sprite
      * @param callback Callback for asynch use
      * @returns {*} The drawObject
      */
-    this.getDrawObject = function (body, callback) {
+    this.getDrawObject = function (body, x, y, callback) {
         var drawObject = {};
         for (var i = 0; i < this.pixels.length; i++) {
             if (!drawObject[this.pixels[i].hex]) {
                 drawObject[this.pixels[i].hex] = [];
             }
-            createPixelDrawArray(drawObject[this.pixels[i].hex], this.pixels[i], body.width, body.height);
+            createPixelDrawArray(drawObject[this.pixels[i].hex], this.pixels[i], x, y, body.width, body.height);
         }
         if (callback) {
             callback(drawObject);

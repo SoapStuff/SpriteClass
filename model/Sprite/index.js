@@ -15,6 +15,9 @@ module.exports = function Sprite(imageUrl, maskUrl) {
     this.imageFrame = new PixelFrame(image.width, image.height, image.data);
     this.maskFrame = undefined;
 
+    this.x = 0;
+    this.y = 0;
+
     var that = this;
 
     if (maskUrl !== undefined) {
@@ -35,9 +38,30 @@ module.exports = function Sprite(imageUrl, maskUrl) {
      */
     this.getDrawObject = function (body, callback) {
         if (callback) {
-            that.imageFrame.getDrawObject(body, callback);
+            that.imageFrame.getDrawObject(body, that.x, that.y, callback);
         } else {
-            return that.imageFrame.getDrawObject(body);
+            return that.imageFrame.getDrawObject(body, that.x, that.y);
+        }
+    };
+
+    /**
+     * Method for moving the sprite.
+     *
+     * @param {String} key The key pressed
+     */
+    this.move = function (key) {
+        switch (key) {
+            case "up":
+                this.y -= 5;
+                break;
+            case "down":
+                this.y += 5;
+                break;
+            case "left":
+                this.x -= 5;
+                break;
+            case "right":
+                this.x += 5;
         }
     };
 

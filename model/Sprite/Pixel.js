@@ -32,7 +32,7 @@ module.exports = function Pixel(x, y, r, g, b, matrix, pixelFrame) {
                     edgeCount++;
                     matrix[hor][ver].edges.push(edge);
                     matrix[hor][ver].edgeCount++;
-                    this.pixelFrame.addEdge(edge);
+                    this.pixelFrame.edges.push(edge);
                 }
             } catch (error) {
                 if (!(error instanceof TypeError)) {

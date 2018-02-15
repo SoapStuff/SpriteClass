@@ -13,9 +13,10 @@
         }
     </style>
 </head>
-<body>
-<canvas id="glCanvas" style="margin: 0"></canvas>
-<%- include('./glPoints.ejs') %>
+<body onkeydown="handleKey(event)">
+<canvas id="glCanvas" onkeydown="handleKey(event)" style="margin: 0"></canvas>
+<%- include('./drawPoints.ejs') %>
 <%- include('./js.ejs') %>
+<%- include('./keyInput.ejs')%>
 </body>
 </html>
